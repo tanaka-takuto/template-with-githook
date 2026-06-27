@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -eu
+
+branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null || true)
+
+case "$branch" in
+  main|develop)
+    cat >&2 <<EOF
+pre-rebase: refusing to rebase protected branch "$branch".
+
+Switch to an issue branch before rebasing:
+  git switch -c 'issue/#123'
+EOF
+    exit 1
+    ;;
+esac
+
+exit 0

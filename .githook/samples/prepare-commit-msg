@@ -1,0 +1,44 @@
+#!/bin/sh
+
+set -eu
+
+commit_msg_file=${1:-}
+commit_source=${2:-}
+
+if [ -z "$commit_msg_file" ] || [ ! -f "$commit_msg_file" ]; then
+  exit 0
+fi
+
+case "$commit_source" in
+  ""|template)
+    ;;
+  *)
+    exit 0
+    ;;
+esac
+
+branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null || true)
+
+case "$branch" in
+  issue/#*)
+    issue_number=${branch#issue/#}
+    ;;
+  *)
+    exit 0
+    ;;
+esac
+
+case "$issue_number" in
+  *[!0-9]*|"")
+    exit 0
+    ;;
+esac
+
+if grep -Eiq "(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)[[:space:]]+#${issue_number}([^0-9]|$)" "$commit_msg_file"; then
+  exit 0
+fi
+
+{
+  printf '\n'
+  printf 'Closes #%s\n' "$issue_number"
+} >>"$commit_msg_file"

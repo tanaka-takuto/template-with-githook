@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -eu
+
+count=0
+
+while read -r old_sha new_sha rest; do
+  count=$((count + 1))
+done
+
+if [ "$count" -gt 0 ]; then
+  printf 'post-rewrite: rewrote %s commit(s)\n' "$count"
+fi

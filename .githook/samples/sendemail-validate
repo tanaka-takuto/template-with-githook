@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -eu
+
+# Add repository-specific git-send-email validation here.
+# This sample intentionally accepts every message.
+
+exit 0

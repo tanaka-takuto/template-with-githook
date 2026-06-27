@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -eu
+
+commit_msg_file=${1:-}
+repo_root=$(git rev-parse --show-toplevel)
+commit_msg_hook="$repo_root/.githook/commit-msg"
+
+if [ ! -x "$commit_msg_hook" ]; then
+  echo "applypatch-msg: missing executable .githook/commit-msg" >&2
+  exit 1
+fi
+
+"$commit_msg_hook" "$commit_msg_file"

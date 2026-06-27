@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -eu
+
+hooks_path=$(git config --get core.hooksPath 2>/dev/null || true)
+commit_template=$(git config --get commit.template 2>/dev/null || true)
+
+if [ "$hooks_path" != ".githook" ] || [ "$commit_template" != ".githook/commit-message-template" ]; then
+  cat <<'EOF'
+post-checkout: local hook configuration does not match this repository template.
+
+Run:
+  script/setup-githook.sh
+EOF
+fi

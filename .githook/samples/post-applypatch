@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -eu
+
+commit=$(git rev-parse --short HEAD)
+
+printf 'post-applypatch: created %s\n' "$commit"

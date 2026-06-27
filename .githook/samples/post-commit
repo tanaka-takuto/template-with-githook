@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -eu
+
+branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null || printf 'detached HEAD')
+commit=$(git rev-parse --short HEAD)
+
+printf 'post-commit: created %s on %s\n' "$commit" "$branch"
